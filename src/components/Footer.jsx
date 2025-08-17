@@ -1,6 +1,7 @@
 "use client";
 import styles from "./Footer.module.css";
 import { FaFacebookF, FaInstagram, FaArrowUp, FaTwitter } from "react-icons/fa";
+import Link from "next/link"; 
 
 export default function Footer() {
   const scrollToTop = () => {
@@ -13,7 +14,9 @@ export default function Footer() {
       <div className={styles.topFooter}>
         {/* Left Column: Logo */}
         <div className={styles.left}>
-          <img src="/logo.png" alt="Logo" className={styles.logo} />
+          <Link href="/">
+            <img src="/logo.png" alt="Logo" className={styles.logo} />
+          </Link>
         </div>
 
         {/* Middle Column: Description */}

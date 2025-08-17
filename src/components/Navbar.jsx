@@ -1,5 +1,6 @@
 "use client";
 import { useState, useEffect, useRef } from "react";
+import Link from "next/link"; 
 import styles from "./Navbar.module.css";
 
 export default function Navbar() {
@@ -7,7 +8,8 @@ export default function Navbar() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const navRef = useRef(null);
 
-  const toggleDropdown = (menu) => {
+  const toggleDropdown = (menu, e) => {
+    e.stopPropagation(); // prevent nav onClick from closing immediately
     setOpenDropdown(openDropdown === menu ? null : menu);
   };
 
@@ -33,16 +35,28 @@ export default function Navbar() {
   };
 
   return (
-    <nav className={styles.navbar} ref={navRef}>
+    <nav
+      className={styles.navbar}
+      ref={navRef}
+      onClick={() => {
+        setOpenDropdown(null);
+        setIsMobileMenuOpen(false);
+      }}
+    >
       {/* Logo */}
       <div className={styles.logo}>
-        <img src="/logo.png" alt="Only Jesus Logo" className={styles.logoImg} />
+        <Link href="/" onClick={handleLinkClick}>
+          <img src="/logo.png" alt="Only Jesus Logo" className={styles.logoImg} />
+        </Link>
       </div>
 
       {/* Hamburger */}
       <div 
         className={styles.hamburger} 
-        onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+        onClick={(e) => {
+          e.stopPropagation(); // prevent nav onClick
+          setIsMobileMenuOpen(!isMobileMenuOpen);
+        }}
       >
         <div className={styles.bar}></div>
         <div className={styles.bar}></div>
@@ -56,7 +70,7 @@ export default function Navbar() {
         {/* About Dropdown */}
         <li className={styles.dropdown}>
           <button 
-            onClick={() => toggleDropdown("about")}
+            onClick={(e) => toggleDropdown("about", e)}
             className={styles.dropbtn}
           >
             About ▾
@@ -71,11 +85,14 @@ export default function Navbar() {
           )}
         </li>
 
-           {/* Q & A Dropdown */}
+        {/* Q & A Dropdown */}
         <li className={styles.dropdown}>
           <button 
-            onClick={() => toggleDropdown("qa")}
-            className={styles.dropbtn}> Q & A ▾ </button>
+            onClick={(e) => toggleDropdown("qa", e)}
+            className={styles.dropbtn}
+          >
+            Q & A ▾
+          </button>
           {openDropdown === "qa" && (
             <ul className={styles.dropdownContent}>
               <li><a href="/qa/church" onClick={handleLinkClick}>Church</a></li>
@@ -90,6 +107,7 @@ export default function Navbar() {
             </ul>
           )}
         </li>
+
         <li><a href="/books" onClick={handleLinkClick}>Books</a></li>
         <li><a href="/blog" onClick={handleLinkClick}>Blog</a></li>
         <li><a href="/articles" onClick={handleLinkClick}>Articles</a></li>
