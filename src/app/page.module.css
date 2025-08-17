@@ -1,0 +1,11 @@
+.mainSection {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 100vh; /* Full viewport height */
+  width: 100%;  /* Full viewport width */
+  padding: 0;
+  margin: 0;
+  overflow: hidden;
+}
+
