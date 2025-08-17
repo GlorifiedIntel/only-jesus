@@ -6,12 +6,33 @@ import styles from "./Navbar.module.css";
 export default function Navbar() {
   const [openDropdown, setOpenDropdown] = useState(null); // "about", "qa", or null
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [darkMode, setDarkMode] = useState(false);
   const navRef = useRef(null);
 
   const toggleDropdown = (menu, e) => {
-    e.stopPropagation(); // prevent nav onClick from closing immediately
+    e.stopPropagation();
     setOpenDropdown(openDropdown === menu ? null : menu);
   };
+
+  // Load theme from localStorage
+  useEffect(() => {
+    const savedTheme = localStorage.getItem("theme");
+    if (savedTheme === "dark") {
+      setDarkMode(true);
+      document.body.classList.add(styles.darkMode);
+    }
+  }, []);
+
+  // Apply dark/light mode + persist choice
+  useEffect(() => {
+    if (darkMode) {
+      document.body.classList.add(styles.darkMode);
+      localStorage.setItem("theme", "dark");
+    } else {
+      document.body.classList.remove(styles.darkMode);
+      localStorage.setItem("theme", "light");
+    }
+  }, [darkMode]);
 
   // Close dropdowns when clicking outside
   useEffect(() => {
@@ -28,7 +49,6 @@ export default function Navbar() {
     };
   }, []);
 
-  // Close menus after clicking a link
   const handleLinkClick = () => {
     setOpenDropdown(null);
     setIsMobileMenuOpen(false);
@@ -54,7 +74,7 @@ export default function Navbar() {
       <div 
         className={styles.hamburger} 
         onClick={(e) => {
-          e.stopPropagation(); // prevent nav onClick
+          e.stopPropagation();
           setIsMobileMenuOpen(!isMobileMenuOpen);
         }}
       >
@@ -66,7 +86,7 @@ export default function Navbar() {
       {/* Menu */}
       <ul className={`${styles.navLinks} ${isMobileMenuOpen ? styles.showMenu : ""}`}>
         <li><a href="/" onClick={handleLinkClick}>Home</a></li>
-        
+
         {/* About Dropdown */}
         <li className={styles.dropdown}>
           <button 
@@ -111,7 +131,20 @@ export default function Navbar() {
         <li><a href="/books" onClick={handleLinkClick}>Books</a></li>
         <li><a href="/blog" onClick={handleLinkClick}>Blog</a></li>
         <li><a href="/articles" onClick={handleLinkClick}>Articles</a></li>
+
+        {/* Right side: Auth + Dark Mode */}
+        <li className={styles.authButtons}>
+          <Link href="/sign-in" className={styles.signInBtn}>Sign In</Link>
+          <Link href="/sign-up" className={styles.signUpBtn}>Sign Up</Link>
+          <button 
+            className={styles.modeToggle} 
+            onClick={(e) => { e.stopPropagation(); setDarkMode(!darkMode); }}
+          >
+            {darkMode ? "☀️" : "🌙"}
+          </button>
+        </li>
       </ul>
     </nav>
   );
 }
+
