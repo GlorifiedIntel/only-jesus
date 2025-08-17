@@ -1,0 +1,1 @@
+This project is a collection of Christian articles centered on the truth that life is not about building our own name or legacy, but about pointing to Christ alone. Each article is written to encourage, challenge, and remind us that in the end, all that matters is Jesus.
