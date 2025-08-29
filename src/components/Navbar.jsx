@@ -1,18 +1,25 @@
 "use client";
 import { useState, useEffect, useRef } from "react";
 import Link from "next/link"; 
+import { usePathname } from "next/navigation";
 import styles from "./Navbar.module.css";
+import { LogIn, UserPlus } from "lucide-react";
 
 export default function Navbar() {
   const [openDropdown, setOpenDropdown] = useState(null); // "about", "qa", or null
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [darkMode, setDarkMode] = useState(false);
   const navRef = useRef(null);
+  const pathname = usePathname();
 
   const toggleDropdown = (menu, e) => {
     e.stopPropagation();
     setOpenDropdown(openDropdown === menu ? null : menu);
   };
+
+  const isActive = (href) => pathname === href;
+
+  const isDropdownActive = (prefix) => pathname.startsWith(prefix);
 
   // Load theme from localStorage
   useEffect(() => {
@@ -85,10 +92,12 @@ export default function Navbar() {
 
       {/* Menu */}
       <ul className={`${styles.navLinks} ${isMobileMenuOpen ? styles.showMenu : ""}`}>
-        <li><a href="/" onClick={handleLinkClick}>Home</a></li>
+        <li className={isActive("/") ? styles.active : ""}>
+          <Link href="/" onClick={handleLinkClick}>Home</Link>
+        </li>
 
         {/* About Dropdown */}
-        <li className={styles.dropdown}>
+        <li className={`${styles.dropdown} ${isDropdownActive("/about") ? styles.active : ""}`}>
           <button 
             onClick={(e) => toggleDropdown("about", e)}
             className={styles.dropbtn}
@@ -97,16 +106,24 @@ export default function Navbar() {
           </button>
           {openDropdown === "about" && (
             <ul className={styles.dropdownContent}>
-              <li><a href="/about/history" onClick={handleLinkClick}>Our History</a></li>
-              <li><a href="/about/kevin-cross-minchakpu" onClick={handleLinkClick}>Kevin Cross Minchakpu</a></li>
-              <li><a href="/about/contributors" onClick={handleLinkClick}>Contributors & Authors</a></li>
-              <li><a href="/about/contact" onClick={handleLinkClick}>Contact Us</a></li>
+              <li className={isActive("/about/history") ? styles.active : ""}>
+                <Link href="/about/history" onClick={handleLinkClick}>Our History</Link>
+              </li>
+              <li className={isActive("/about/kevin-cross-minchakpu") ? styles.active : ""}>
+                <Link href="/about/kevin-cross-minchakpu" onClick={handleLinkClick}>Kevin Cross Minchakpu</Link>
+              </li>
+              <li className={isActive("/about/contributors") ? styles.active : ""}>
+                <Link href="/about/contributors" onClick={handleLinkClick}>Contributors & Authors</Link>
+              </li>
+              <li className={isActive("/about/contact") ? styles.active : ""}>
+                <Link href="/about/contact" onClick={handleLinkClick}>Contact Us</Link>
+              </li>
             </ul>
           )}
         </li>
 
         {/* Q & A Dropdown */}
-        <li className={styles.dropdown}>
+        <li className={`${styles.dropdown} ${isDropdownActive("/qa") ? styles.active : ""}`}>
           <button 
             onClick={(e) => toggleDropdown("qa", e)}
             className={styles.dropbtn}
@@ -115,36 +132,52 @@ export default function Navbar() {
           </button>
           {openDropdown === "qa" && (
             <ul className={styles.dropdownContent}>
-              <li><a href="/qa/church" onClick={handleLinkClick}>Church</a></li>
-              <li><a href="/qa/faith-doubt" onClick={handleLinkClick}>Faith and Doubt</a></li>
-              <li><a href="/qa/homosexuality" onClick={handleLinkClick}>Homosexuality</a></li>
-              <li><a href="/qa/living-christianity" onClick={handleLinkClick}>Living Christianity</a></li>
-              <li><a href="/qa/personal-matters" onClick={handleLinkClick}>Personal Matters</a></li>
-              <li><a href="/qa/politics" onClick={handleLinkClick}>Politics</a></li>
-              <li><a href="/qa/prayer" onClick={handleLinkClick}>Prayer</a></li>
-              <li><a href="/qa/marriage" onClick={handleLinkClick}>Marriage</a></li>
-              <li><a href="/qa/dating" onClick={handleLinkClick}>Dating</a></li>
+              <li className={isActive("/qa/church") ? styles.active : ""}>
+                <Link href="/qa/church" onClick={handleLinkClick}>Church</Link>
+              </li>
+              <li className={isActive("/qa/faith-doubt") ? styles.active : ""}>
+                <Link href="/qa/faith-doubt" onClick={handleLinkClick}>Faith and Doubt</Link>
+              </li>
+              <li className={isActive("/qa/homosexuality") ? styles.active : ""}>
+                <Link href="/qa/homosexuality" onClick={handleLinkClick}>Homosexuality</Link>
+              </li>
+              <li className={isActive("/qa/living-christianity") ? styles.active : ""}>
+                <Link href="/qa/living-christianity" onClick={handleLinkClick}>Living Christianity</Link>
+              </li>
+              <li className={isActive("/qa/personal-matters") ? styles.active : ""}>
+                <Link href="/qa/personal-matters" onClick={handleLinkClick}>Personal Matters</Link>
+              </li>
+              <li className={isActive("/qa/politics") ? styles.active : ""}>
+                <Link href="/qa/politics" onClick={handleLinkClick}>Politics</Link>
+              </li>
+              <li className={isActive("/qa/prayer") ? styles.active : ""}>
+                <Link href="/qa/prayer" onClick={handleLinkClick}>Prayer</Link>
+              </li>
+              <li className={isActive("/qa/marriage") ? styles.active : ""}>
+                <Link href="/qa/marriage" onClick={handleLinkClick}>Marriage</Link>
+              </li>
+              <li className={isActive("/qa/dating") ? styles.active : ""}>
+                <Link href="/qa/dating" onClick={handleLinkClick}>Dating</Link>
+              </li>
             </ul>
           )}
         </li>
 
-        <li><a href="/books" onClick={handleLinkClick}>Books</a></li>
-        <li><a href="/blog" onClick={handleLinkClick}>Blog</a></li>
-        <li><a href="/articles" onClick={handleLinkClick}>Articles</a></li>
-
-        {/* Right side: Auth + Dark Mode */}
-        <li className={styles.authButtons}>
-          <Link href="/sign-in" className={styles.signInBtn}>Sign In</Link>
-          <Link href="/sign-up" className={styles.signUpBtn}>Sign Up</Link>
-          <button 
-            className={styles.modeToggle} 
-            onClick={(e) => { e.stopPropagation(); setDarkMode(!darkMode); }}
-          >
-            {darkMode ? "☀️" : "🌙"}
-          </button>
+        <li className={isActive("/books") ? styles.active : ""}>
+          <Link href="/books" onClick={handleLinkClick}>Books</Link>
+        </li>
+        <li className={isActive("/blog") ? styles.active : ""}>
+          <Link href="/blog" onClick={handleLinkClick}>Blog</Link>
+        </li>
+        <li className={isActive("/articles") ? styles.active : ""}>
+          <Link href="/articles" onClick={handleLinkClick}>Articles</Link>
+        </li>
+        <li className={`${styles.donate} ${isActive("/donate") ? styles.active : ""}`}>
+          <Link href="/donate" onClick={handleLinkClick} className={styles.donate}>
+            Donate
+          </Link>
         </li>
       </ul>
     </nav>
   );
-}
-
+} 

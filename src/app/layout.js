@@ -1,6 +1,11 @@
 import "./globals.css";
-import Navbar from "../components/Navbar";
-import Footer from "../components/Footer";
+import Navbar from "@/components/Navbar";
+import Footer from "@/components/Footer";
+import TopNav from "@/components/TopNav";
+import { ThemeProvider } from 'next-themes';
+import ThemeCom from '@/components/ThemeCom';
+import { ClerkProvider } from '@clerk/nextjs';
+import { ThemeModeScript } from 'flowbite-react';
 import { Play, Poppins } from "next/font/google";
 
 // Fonts
@@ -23,12 +28,22 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en">
-      <body className={`${playFont.variable} ${poppinsFont.variable}`}>
-        <Navbar />      
-        <main>{children}</main>
-        <Footer />
-      </body>
-    </html>
+    <ClerkProvider>
+      <html lang="en" suppressHydrationWarning>
+        <head>
+          <ThemeModeScript />
+        </head>
+        <body className={`${playFont.variable} ${poppinsFont.variable}`}>
+          <ThemeProvider>
+            <ThemeCom>
+              <TopNav />
+              <Navbar />
+              <main>{children}</main>
+              <Footer />
+            </ThemeCom>
+          </ThemeProvider>
+        </body>
+      </html>
+    </ClerkProvider>
   );
 }

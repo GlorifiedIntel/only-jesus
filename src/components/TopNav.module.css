@@ -1,0 +1,27 @@
+.topnav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.75rem 2rem;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  transition: background 0.3s, color 0.3s;
+  background-color: #1B1B1E;
+}
+
+.SignInButton {
+  background-color: #FBFFFE;
+  width: 100px;
+  color: rgb(48, 47, 47);
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.SignInButton:hover {
+  background-color: #2d3748;
+  color: whitesmoke;
+}
